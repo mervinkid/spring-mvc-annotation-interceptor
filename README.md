@@ -6,15 +6,17 @@
 ![Release](https://img.shields.io/badge/release-1.0.0-blue.svg?style=flat)
 ![License MIT](https://img.shields.io/badge/license-MIT-lightgray.svg?style=flat&maxAge=2592000)
 
-A annotation generic based java web interceptor for [Spring MVC](https://spring.io).
+Annotation generic based java web interceptor for [Spring MVC](https://spring.io).
 
 ## Usage
 
 
-1. Add `annotation-inter` to dependencies of your project. 
+1. Add `annotation-interceptor` to your project. 
 2. Create a java annotation which you want to handle. For example `RequireToken`.
 3. Create your own class like `TokenInterceptorAdapter` extend by `me.mervinz.springmvc.interceptor.AnnotationInterceptorAdapter` to handle the annotation `RequireToken`.
 4. Override the function `preAnnotationHandler` and `postAnnotationHandler`. Then write your code.
+
+    **Sample**:
 
     ```
     package me.mervinz.demo.interceptor;
@@ -67,7 +69,28 @@ A annotation generic based java web interceptor for [Spring MVC](https://spring.
          */
         @Override
         public void addInterceptors(InterceptorRegistry registry) {
+        
+            // Register your interceptor
             registry.addInterceptor(new TokenInterceptorAdapter());
+            
+            // Or
+            registry.addInterceptor(new AnnotationInterceptorAdapter<RequireToken>() {
+            
+                @Override
+                public boolean preAnnotationHandler(HttpServletRequest request, HttpServletResponse response, Object handler, RequireLogin annotation) throws Exception {
+                
+                    // Put your code here ...
+                    return false;
+                }
+                
+                @Override
+                public void postAnnotationHandler(HttpServletRequest request, HttpServletResponse response,
+                                                  Object handler, ModelAndView modelAndView, T annotation) throws Exception {
+                                                  
+                    // Put your code here ...
+                }
+            });
+            
             // Registry other interceptors
         }
         
@@ -92,7 +115,7 @@ For detail see `pom.xml`.
 ## Contributing
 
 1. Fork it.
-2. Creature your feature branch. (`$ git checkout feature/my-feature-branch`)
+2. Create your feature branch. (`$ git checkout feature/my-feature-branch`)
 3. Commit your changes. (`$ git commit -am 'What feature I just added.'`)
 4. Push to the branch. (`$ git push origin feature/my-feature-branch`)
 5. Create a new Pull Request
