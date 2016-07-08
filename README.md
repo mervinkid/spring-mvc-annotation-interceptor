@@ -3,7 +3,7 @@
 ![Java](https://img.shields.io/badge/java-1.8-orange.svg?style=flat)
 ![Maven](https://img.shields.io/badge/maven-3.3.9-orange.svg?style=flat)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen.svg?style=flat)
-![Release](https://img.shields.io/badge/release-none-blue.svg?style=flat)
+![Release](https://img.shields.io/badge/release-1.0.0-blue.svg?style=flat)
 ![License MIT](https://img.shields.io/badge/license-MIT-lightgray.svg?style=flat&maxAge=2592000)
 
 A annotation generic based java web interceptor for [Spring MVC](https://spring.io).
@@ -14,7 +14,7 @@ A annotation generic based java web interceptor for [Spring MVC](https://spring.
 1. Add `annotation-inter` to dependencies of your project. 
 2. Create a java annotation which you want to handle. For example `RequireToken`.
 3. Create your own class like `TokenInterceptorAdapter` extend by `me.mervinz.springmvc.interceptor.AnnotationInterceptorAdapter` to handle the annotation `RequireToken`.
-4. Override the abstract function `preAnnotationHandler` and put your code in it.
+4. Override the function `preAnnotationHandler` and `postAnnotationHandler`. Then write your code.
 
     ```
     package me.mervinz.demo.interceptor;
@@ -26,11 +26,20 @@ A annotation generic based java web interceptor for [Spring MVC](https://spring.
     
     public final class TokenInterceptorAdapter extends AnnotationInterceptorAdapter<RequireToken> {
     
+        // This is the replacement for original method 'preHandler'
         @Override
         public boolean preAnnotationHandler(HttpServletRequest request, HttpServletResponse response, Object handler,
                                             RequireLogin annotation) throws Exception {
             // Put your code here ...
             return false;
+        }
+        
+        // This is the replacement for original method 'postHandler'
+        @Override
+        public void postAnnotationHandler(HttpServletRequest request, HttpServletResponse response,
+                                          Object handler, ModelAndView modelAndView, T annotation) throws Exception {
+                                          
+            // Put your code here ...
         }
     }
     ```
@@ -75,6 +84,10 @@ A annotation generic based java web interceptor for [Spring MVC](https://spring.
         </mvc:interceptor>
     </mvc:interceptors>
     ```
+    
+## Dependencies
+
+For detail see `pom.xml`.
 
 ## Contributing
 
