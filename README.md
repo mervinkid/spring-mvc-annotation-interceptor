@@ -3,7 +3,7 @@
 ![Java](https://img.shields.io/badge/java-1.8-orange.svg?style=flat)
 ![Maven](https://img.shields.io/badge/maven-3.3.9-orange.svg?style=flat)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen.svg?style=flat)
-![Release](https://img.shields.io/badge/release-none-blue.svg?style=flat)
+![Release](https://img.shields.io/badge/release-1.0.0-blue.svg?style=flat)
 ![License MIT](https://img.shields.io/badge/license-MIT-lightgray.svg?style=flat&maxAge=2592000)
 
 A annotation generic based java web interceptor for [Spring MVC](https://spring.io).
