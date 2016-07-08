@@ -12,6 +12,12 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+/**
+ * Abstract class for AnnotationInterceptor implement
+ *
+ * @param <T> annotation generic
+ * @author Mervin
+ */
 public abstract class AnnotationInterceptorAdapter<T extends Annotation>
         extends HandlerInterceptorAdapter implements AnnotationInterceptor<T> {
 
@@ -21,6 +27,7 @@ public abstract class AnnotationInterceptorAdapter<T extends Annotation>
 
     /**
      * Constructor
+     * Get specified annotation type from class parameter.
      */
     @SuppressWarnings("unchecked")
     public AnnotationInterceptorAdapter() {
@@ -37,6 +44,7 @@ public abstract class AnnotationInterceptorAdapter<T extends Annotation>
                 }
             }
             if (cursor.getSuperclass() == AnnotationInterceptorAdapter.class) {
+                logger.error("Interceptor init fail. No valid class parameter found.");
                 break;
             }
             cursor = cursor.getSuperclass();
@@ -46,10 +54,11 @@ public abstract class AnnotationInterceptorAdapter<T extends Annotation>
     /**
      * Get annotation from handler
      *
-     * @param handler Handler
+     * @param handler handler to execute
      * @return annotation
      */
     private T getAnnotation(Object handler) {
+
         if (this.annotationClass == null) {
             return null;
         }
@@ -61,6 +70,19 @@ public abstract class AnnotationInterceptorAdapter<T extends Annotation>
         return methodAnnotation != null ? methodAnnotation : classAnnotation;
     }
 
+    /**
+     * Override original pre handler.
+     * Try to get annotation from handler method or class.
+     * If the annotation exist, call the replacement handler 'preAnnotationHandler'.
+     *
+     * @param request  current HTTP request
+     * @param response current HTTP response
+     * @param handler  chosen handler to execute, for type and/or instance evaluation
+     * @return {@code true} if the execution chain should proceed with the
+     * next interceptor or the handler itself. Else, DispatcherServlet assumes
+     * that this interceptor has already dealt with the response itself.
+     * @throws Exception in case of errors
+     */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
@@ -69,6 +91,19 @@ public abstract class AnnotationInterceptorAdapter<T extends Annotation>
         return annotation == null || preAnnotationHandler(request, response, handler, annotation);
     }
 
+    /**
+     * Override original post handler.
+     * Try to get annotation from handler method or class.
+     * If the annotation exist, call the replacement handler 'postAnnotationHandler'.
+     *
+     * @param request      current HTTP request
+     * @param response     current HTTP response
+     * @param handler      handler (or {@link HandlerMethod}) that started async
+     *                     execution, for type and/or instance examination
+     * @param modelAndView the {@code ModelAndView} that the handler returned
+     *                     (can also be {@code null})
+     * @throws Exception in case of errors
+     */
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
                            ModelAndView modelAndView) throws Exception {

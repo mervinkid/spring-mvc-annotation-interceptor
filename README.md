@@ -14,7 +14,7 @@ A annotation generic based java web interceptor for [Spring MVC](https://spring.
 1. Add `annotation-inter` to dependencies of your project. 
 2. Create a java annotation which you want to handle. For example `RequireToken`.
 3. Create your own class like `TokenInterceptorAdapter` extend by `me.mervinz.springmvc.interceptor.AnnotationInterceptorAdapter` to handle the annotation `RequireToken`.
-4. Override the abstract function `preAnnotationHandler` and put your code in it.
+4. Override the function `preAnnotationHandler` and `postAnnotationHandler`. Then write your code.
 
     ```
     package me.mervinz.demo.interceptor;
@@ -26,11 +26,20 @@ A annotation generic based java web interceptor for [Spring MVC](https://spring.
     
     public final class TokenInterceptorAdapter extends AnnotationInterceptorAdapter<RequireToken> {
     
+        // This is the replacement for original method 'preHandler'
         @Override
         public boolean preAnnotationHandler(HttpServletRequest request, HttpServletResponse response, Object handler,
                                             RequireLogin annotation) throws Exception {
             // Put your code here ...
             return false;
+        }
+        
+        // This is the replacement for original method 'postHandler'
+        @Override
+        public void postAnnotationHandler(HttpServletRequest request, HttpServletResponse response,
+                                          Object handler, ModelAndView modelAndView, T annotation) throws Exception {
+                                          
+            // Put your code here ...
         }
     }
     ```
