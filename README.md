@@ -75,6 +75,10 @@ A annotation generic based java web interceptor for [Spring MVC](https://spring.
         </mvc:interceptor>
     </mvc:interceptors>
     ```
+    
+## Dependencies
+
+For detail see `pom.xml`.
 
 ## Contributing
 
