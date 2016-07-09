@@ -6,15 +6,48 @@
 ![Release](https://img.shields.io/badge/release-1.0.0-blue.svg?style=flat)
 ![License MIT](https://img.shields.io/badge/license-MIT-lightgray.svg?style=flat&maxAge=2592000)
 
-A annotation generic based java web interceptor for [Spring MVC](https://spring.io).
+Annotation generic based java web interceptor for [Spring MVC](https://spring.io).
 
 ## Usage
 
 
-1. Add `annotation-inter` to dependencies of your project. 
-2. Create a java annotation which you want to handle. For example `RequireToken`.
-3. Create your own class like `TokenInterceptorAdapter` extend by `me.mervinz.springmvc.interceptor.AnnotationInterceptorAdapter` to handle the annotation `RequireToken`.
-4. Override the function `preAnnotationHandler` and `postAnnotationHandler`. Then write your code.
+1. Add `annotation-interceptor` to your project. 
+
+    For **Maven**:
+    
+    ```
+    <dependency>
+      <groupId>me.mervinz</groupId>
+      <artifactId>spring-mvc-annotation-interceptor</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+    ```
+    
+    For **Gradle**:
+    
+    ```
+    compile group: 'me.mervinz', name: 'spring-mvc-annotation-interceptor', version: '1.0.0'
+    ```
+    
+2. Create a java annotation which you want the interceptor to handle. For example `RequireToken`.
+
+    ```
+    package me.mervinz.demo.annotation;
+    
+    import java.lang.annotation.*;
+    
+    @Documented
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target({ElementType.METHOD, ElementType.TYPE})
+    @Inherited
+    public @interface RequireToken {
+    }
+    ```
+    
+3. Create your own interceptor class like `TokenInterceptorAdapter` extend by abstract class `me.mervinz.springmvc.interceptor.AnnotationInterceptorAdapter` to intercept the annotation `RequireToken`.
+4. Override the method `preAnnotationHandler` and `postAnnotationHandler`.
+
+    **Sample**:
 
     ```
     package me.mervinz.demo.interceptor;
@@ -30,7 +63,7 @@ A annotation generic based java web interceptor for [Spring MVC](https://spring.
         @Override
         public boolean preAnnotationHandler(HttpServletRequest request, HttpServletResponse response, Object handler,
                                             RequireLogin annotation) throws Exception {
-            // Put your code here ...
+            // put your code here ...
             return false;
         }
         
@@ -39,10 +72,11 @@ A annotation generic based java web interceptor for [Spring MVC](https://spring.
         public void postAnnotationHandler(HttpServletRequest request, HttpServletResponse response,
                                           Object handler, ModelAndView modelAndView, T annotation) throws Exception {
                                           
-            // Put your code here ...
+            // put your code here ...
         }
     }
     ```
+    
 5. Register the interceptor to you spring mvc configuration.
 
     For **JavaConfig**:
@@ -67,22 +101,54 @@ A annotation generic based java web interceptor for [Spring MVC](https://spring.
          */
         @Override
         public void addInterceptors(InterceptorRegistry registry) {
+        
+            // Register your interceptor
             registry.addInterceptor(new TokenInterceptorAdapter());
+            
+            // Or
+            registry.addInterceptor(new AnnotationInterceptorAdapter<RequireToken>() {
+            
+                @Override
+                public boolean preAnnotationHandler(HttpServletRequest request, HttpServletResponse response, Object handler, RequireLogin annotation) throws Exception {
+                
+                    // Put your code here ...
+                    return false;
+                }
+                
+                @Override
+                public void postAnnotationHandler(HttpServletRequest request, HttpServletResponse response,
+                                                  Object handler, ModelAndView modelAndView, T annotation) throws Exception {
+                                                  
+                    // Put your code here ...
+                }
+            });
+            
             // Registry other interceptors
         }
         
     }
     ```
     
-    For **xml**:
+    For **XML**:
     
     ```
-    <mvc:interceptors>
-        <mvc:interceptor>
-            <mvc:mapping path="/*"/>
-            <bean class="me.mervinz.demo.interceptor.TokenInterceptorAdapter"/>
-        </mvc:interceptor>
-    </mvc:interceptors>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:context="http://www.springframework.org/schema/context"
+           xmlns:mvc="http://www.springframework.org/schema/mvc"
+           xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+            http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+        
+        <context:component-scan base-package="me.mervinz.demo"/>
+        
+        <mvc:interceptors>
+            <mvc:interceptor>
+                <bean class="me.mervinz.demo.interceptor.TokenInterceptorAdapter"/>
+            </mvc:interceptor>
+        </mvc:interceptors>
+        
+    </beans>
     ```
     
 ## Dependencies
@@ -92,7 +158,7 @@ For detail see `pom.xml`.
 ## Contributing
 
 1. Fork it.
-2. Creature your feature branch. (`$ git checkout feature/my-feature-branch`)
+2. Create your feature branch. (`$ git checkout feature/my-feature-branch`)
 3. Commit your changes. (`$ git commit -am 'What feature I just added.'`)
 4. Push to the branch. (`$ git push origin feature/my-feature-branch`)
 5. Create a new Pull Request
