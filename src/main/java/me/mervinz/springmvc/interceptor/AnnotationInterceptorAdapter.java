@@ -71,6 +71,14 @@ public abstract class AnnotationInterceptorAdapter<T extends Annotation>
     }
 
     /**
+     * Get annotation class
+     * @return type of annotation
+     */
+    public Class<T> getAnnotationClass() {
+        return annotationClass;
+    }
+
+    /**
      * Override original pre handler.
      * Try to get annotation from handler method or class.
      * If the annotation exist, call the replacement handler 'preAnnotationHandler'.
@@ -115,4 +123,19 @@ public abstract class AnnotationInterceptorAdapter<T extends Annotation>
         }
     }
 
+    /**
+     * Replacement for original post handler
+     */
+    @Override
+    public void postAnnotationHandler(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView, T annotation) throws Exception {
+
+    }
+
+    /**
+     * Replacement for original pre handler
+     */
+    @Override
+    public boolean preAnnotationHandler(HttpServletRequest request, HttpServletResponse response, Object handler, T annotation) throws Exception {
+        return true;
+    }
 }
