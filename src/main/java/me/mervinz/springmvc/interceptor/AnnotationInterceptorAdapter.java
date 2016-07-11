@@ -18,6 +18,7 @@ import java.lang.reflect.Type;
  * @param <T> annotation generic
  * @author Mervin
  */
+@SuppressWarnings("unused")
 public abstract class AnnotationInterceptorAdapter<T extends Annotation>
         extends HandlerInterceptorAdapter implements AnnotationInterceptor<T> {
 
@@ -72,6 +73,7 @@ public abstract class AnnotationInterceptorAdapter<T extends Annotation>
 
     /**
      * Get annotation class
+     *
      * @return type of annotation
      */
     public Class<T> getAnnotationClass() {
@@ -92,7 +94,10 @@ public abstract class AnnotationInterceptorAdapter<T extends Annotation>
      * @throws Exception in case of errors
      */
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public final boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
+        // Call extend method
+        this.extendPreHandler(request, response, handler);
 
         T annotation = this.getAnnotation(handler);
 
@@ -113,14 +118,51 @@ public abstract class AnnotationInterceptorAdapter<T extends Annotation>
      * @throws Exception in case of errors
      */
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-                           ModelAndView modelAndView) throws Exception {
+    public final void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
+                                 ModelAndView modelAndView) throws Exception {
+
+        // Call extend method
+        this.extendPostHandler(request, response, handler, modelAndView);
 
         T annotation = this.getAnnotation(handler);
 
         if (annotation != null) {
             postAnnotationHandler(request, response, handler, modelAndView, annotation);
         }
+    }
+
+    /**
+     * Extension for original post handler
+     * The original post handler will run these code before it's own code.
+     *
+     * @param request      current HTTP request
+     * @param response     current HTTP response
+     * @param handler      handler (or {@link HandlerMethod}) that started async
+     *                     execution, for type and/or instance examination
+     * @param modelAndView the {@code ModelAndView} that the handler returned
+     *                     (can also be {@code null})
+     * @throws Exception in case of errors
+     */
+    @Override
+    public void extendPostHandler(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+
+    }
+
+    /**
+     * Extension for original pre handler
+     * The original pre handler will run these code before it's own code.
+     *
+     * @param request  current HTTP request
+     * @param response current HTTP response
+     * @param handler  chosen handler to execute, for type and/or instance evaluation
+     * @return {@code true} if the execution chain should proceed with the
+     * next interceptor or the handler itself. Else, DispatcherServlet assumes
+     * that this interceptor has already dealt with the response itself.
+     * @throws Exception in case of errors
+     */
+    @Override
+    public boolean extendPreHandler(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        return true;
     }
 
     /**
