@@ -15,7 +15,7 @@ import java.lang.annotation.Annotation;
  * @author Mervin
  */
 @SuppressWarnings("unused")
-public interface AnnotationInterceptor<T extends Annotation> extends HandlerInterceptor {
+public interface GenericAnnotationInterceptor<T extends Annotation> extends HandlerInterceptor {
 
     /**
      * Replacement for original pre handler

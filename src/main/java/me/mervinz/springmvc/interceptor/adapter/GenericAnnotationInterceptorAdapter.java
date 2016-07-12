@@ -1,5 +1,6 @@
-package me.mervinz.springmvc.interceptor;
+package me.mervinz.springmvc.interceptor.adapter;
 
+import me.mervinz.springmvc.interceptor.GenericAnnotationInterceptor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.method.HandlerMethod;
@@ -19,8 +20,8 @@ import java.lang.reflect.Type;
  * @author Mervin
  */
 @SuppressWarnings("unused")
-public abstract class AnnotationInterceptorAdapter<T extends Annotation>
-        extends HandlerInterceptorAdapter implements AnnotationInterceptor<T> {
+public abstract class GenericAnnotationInterceptorAdapter<T extends Annotation>
+        extends HandlerInterceptorAdapter implements GenericAnnotationInterceptor<T> {
 
     private Class<T> annotationClass;   // Annotation class
 
@@ -31,7 +32,7 @@ public abstract class AnnotationInterceptorAdapter<T extends Annotation>
      * Get specified annotation type from class parameter.
      */
     @SuppressWarnings("unchecked")
-    public AnnotationInterceptorAdapter() {
+    public GenericAnnotationInterceptorAdapter() {
         Class cursor = this.getClass();
         while (true) {
             Type sType = cursor.getGenericSuperclass();
@@ -44,7 +45,7 @@ public abstract class AnnotationInterceptorAdapter<T extends Annotation>
                     break;
                 }
             }
-            if (cursor.getSuperclass() == AnnotationInterceptorAdapter.class) {
+            if (cursor.getSuperclass() == GenericAnnotationInterceptorAdapter.class) {
                 logger.error("Interceptor init fail. No valid class parameter found.");
                 break;
             }
@@ -166,7 +167,7 @@ public abstract class AnnotationInterceptorAdapter<T extends Annotation>
     }
 
     /**
-     * Replacement for original post handler
+     * This implementation is empty.
      */
     @Override
     public void postAnnotationHandler(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView, T annotation) throws Exception {
@@ -174,7 +175,7 @@ public abstract class AnnotationInterceptorAdapter<T extends Annotation>
     }
 
     /**
-     * Replacement for original pre handler
+     * This implementation always returns {@code true}.
      */
     @Override
     public boolean preAnnotationHandler(HttpServletRequest request, HttpServletResponse response, Object handler, T annotation) throws Exception {
