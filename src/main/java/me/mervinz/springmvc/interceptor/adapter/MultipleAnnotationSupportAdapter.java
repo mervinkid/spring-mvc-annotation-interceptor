@@ -2,6 +2,7 @@ package me.mervinz.springmvc.interceptor.adapter;
 
 import me.mervinz.springmvc.interceptor.AnnotationHandler;
 import me.mervinz.springmvc.interceptor.ExtendOriginalHandler;
+import me.mervinz.springmvc.interceptor.MultipleAnnotationSupport;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import java.util.ArrayList;
@@ -9,10 +10,14 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * Abstract class for multiple annotation support.
+ * This is the base for other interceptor.
+ *
  * @author Mervin
  */
 @SuppressWarnings("unused")
-public abstract class MultipleAnnotationSupportAdapter extends HandlerInterceptorAdapter {
+public abstract class MultipleAnnotationSupportAdapter
+        extends HandlerInterceptorAdapter implements MultipleAnnotationSupport {
 
     protected List<AnnotationHandler> handlers = new ArrayList<>();
 
@@ -53,9 +58,11 @@ public abstract class MultipleAnnotationSupportAdapter extends HandlerIntercepto
      * These code will run before pipe line handler.
      *
      * @param extendOriginalHandler instance of ExtendOriginalHandler
+     * @return current handler instance
      */
-    public final void setExtendOriginalHandler(ExtendOriginalHandler extendOriginalHandler) {
+    public final MultipleAnnotationSupport setExtendOriginalHandler(ExtendOriginalHandler extendOriginalHandler) {
         this.extendOriginalHandler = extendOriginalHandler;
+        return this;
     }
 
     /**
@@ -63,10 +70,11 @@ public abstract class MultipleAnnotationSupportAdapter extends HandlerIntercepto
      *
      * @param handlers list of handler instances
      */
-    public void addHandlers(List<AnnotationHandler> handlers) {
+    public MultipleAnnotationSupport addHandlers(List<AnnotationHandler> handlers) {
         handlers.stream()
                 .filter(p -> p.getHandlerAnnotationClass() != null)
                 .forEach(p -> this.handlers.add(p));
+        return this;
     }
 
     /**
@@ -74,9 +82,20 @@ public abstract class MultipleAnnotationSupportAdapter extends HandlerIntercepto
      *
      * @param handler handler instance
      */
-    public void addHandler(AnnotationHandler handler) {
+    public MultipleAnnotationSupport addHandler(AnnotationHandler handler) {
         if (handler.getHandlerAnnotationClass() != null) {
             this.handlers.add(handler);
         }
+        return this;
+    }
+
+    /**
+     * Get handlers
+     *
+     * @return collection for annotation handler
+     */
+    @Override
+    public final List<AnnotationHandler> getHandlers() {
+        return this.handlers;
     }
 }

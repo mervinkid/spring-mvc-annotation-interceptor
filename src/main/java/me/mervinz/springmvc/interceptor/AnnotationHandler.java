@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.lang.annotation.Annotation;
 
 /**
+ * Interface for handler with annotation support.
+ *
  * @author Mervin
  */
 @SuppressWarnings("unused")

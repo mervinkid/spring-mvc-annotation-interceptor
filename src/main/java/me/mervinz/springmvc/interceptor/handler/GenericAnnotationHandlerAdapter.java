@@ -13,6 +13,8 @@ import java.lang.reflect.Type;
 import java.util.Objects;
 
 /**
+ * Generic based handler implementation for interceptor with multiple annotation support.
+ *
  * @param <T> annotation generic
  * @author Mervin
  */

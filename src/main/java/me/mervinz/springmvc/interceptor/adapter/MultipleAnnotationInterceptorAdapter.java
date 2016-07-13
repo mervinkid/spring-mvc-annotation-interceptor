@@ -11,11 +11,13 @@ import java.lang.annotation.Annotation;
 import java.util.*;
 
 /**
+ * Interceptor implementation for multiple annotation support.
+ *
  * @author Mervin
  */
 @SuppressWarnings("unused")
 public final class MultipleAnnotationInterceptorAdapter
-        extends MultipleAnnotationSupportAdapter implements MultipleAnnotationSupport {
+        extends MultipleAnnotationSupportAdapter {
 
     private Map<Class, AnnotationHandler> handlerMap = new HashMap<>();
 
@@ -41,7 +43,7 @@ public final class MultipleAnnotationInterceptorAdapter
 
         // Loop through activated annotations
         for (Annotation annotation : activatedAnnotationSet) {
-            AnnotationHandler annotationHandler = this.handlerMap.get(annotation.getClass());
+            AnnotationHandler annotationHandler = this.handlerMap.get(annotation.annotationType());
             if (annotationHandler != null) {
                 annotationHandler.postAnnotationHandler(request, response, handler, modelAndView, annotation);
             }
@@ -63,16 +65,14 @@ public final class MultipleAnnotationInterceptorAdapter
         Set<Annotation> activatedAnnotationSet = new HashSet<>();
 
         // Add class annotations to collection
-        Arrays.asList(handlerMethod.getClass().getAnnotations())
-                .forEach(activatedAnnotationSet::add);
+        activatedAnnotationSet.addAll(Arrays.asList(handlerMethod.getClass().getAnnotations()));
 
         // Add method annotations to collection
-        Arrays.asList(handlerMethod.getMethod().getAnnotations())
-                .forEach(activatedAnnotationSet::add);
+        activatedAnnotationSet.addAll(Arrays.asList(handlerMethod.getMethod().getAnnotations()));
 
         // Loop through activated annotations
         for (Annotation annotation : activatedAnnotationSet) {
-            AnnotationHandler annotationHandler = this.handlerMap.get(annotation.getClass());
+            AnnotationHandler annotationHandler = this.handlerMap.get(annotation.annotationType());
             if (annotationHandler != null) {
                 if (!annotationHandler.preAnnotationHandler(request, response, handler, annotation)) {
                     return false;
@@ -89,9 +89,10 @@ public final class MultipleAnnotationInterceptorAdapter
      * @param handler handler instance
      */
     @Override
-    public void addHandler(AnnotationHandler handler) {
+    public MultipleAnnotationSupport addHandler(AnnotationHandler handler) {
         super.addHandler(handler);
         this.updateHandlerMap();
+        return this;
     }
 
     /**
@@ -100,9 +101,10 @@ public final class MultipleAnnotationInterceptorAdapter
      * @param handlers list of handler instances
      */
     @Override
-    public void addHandlers(List<AnnotationHandler> handlers) {
+    public MultipleAnnotationSupport addHandlers(List<AnnotationHandler> handlers) {
         super.addHandlers(handlers);
         this.updateHandlerMap();
+        return this;
     }
 
     /**
@@ -112,5 +114,15 @@ public final class MultipleAnnotationInterceptorAdapter
         this.handlers.stream()
                 .filter(p -> this.handlerMap.get(p.getHandlerAnnotationClass()) == null)
                 .forEach(p -> this.handlerMap.put(p.getHandlerAnnotationClass(), p));
+    }
+
+    /**
+     * Get specified handler
+     *
+     * @param annotationClass specified annotation type
+     * @return handler
+     */
+    public AnnotationHandler getHandler(Class annotationClass) {
+        return this.handlerMap.get(annotationClass);
     }
 }

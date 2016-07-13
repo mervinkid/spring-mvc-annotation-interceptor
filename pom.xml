@@ -159,6 +159,9 @@
                     <includes>
                         <include>META-INF/LICENSE.txt</include>
                     </includes>
+                    <excludes>
+                        <exclude>**/*Test.java</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
             <!-- Source -->

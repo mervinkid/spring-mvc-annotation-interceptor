@@ -9,19 +9,21 @@ import java.lang.annotation.Annotation;
 import java.util.Objects;
 
 /**
+ * Handler implement for interceptor with multiple annotation support.
+ *
  * @author Mervin
  */
 @SuppressWarnings("unused")
 public abstract class AnnotationHandlerAdapter implements AnnotationHandler {
 
-    private Class<Annotation> annotationClass;
+    private Class annotationClass;
 
     /**
      * Constructor with annotation type
      *
      * @param annotationClass specified annotation type
      */
-    public AnnotationHandlerAdapter(Class<Annotation> annotationClass) {
+    public AnnotationHandlerAdapter(Class annotationClass) {
         if (annotationClass != null) {
             this.annotationClass = annotationClass;
         }
@@ -33,7 +35,7 @@ public abstract class AnnotationHandlerAdapter implements AnnotationHandler {
      * @return annotation class
      */
     @Override
-    public Class getHandlerAnnotationClass() {
+    public final Class getHandlerAnnotationClass() {
         return this.annotationClass;
     }
 

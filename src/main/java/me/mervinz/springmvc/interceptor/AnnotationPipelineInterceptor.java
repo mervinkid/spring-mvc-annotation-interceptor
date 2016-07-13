@@ -5,6 +5,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import java.util.List;
 
 /**
+ * Interface provide annotation interceptor with pipeline support.
+ *
  * @author Mervin
  */
 @SuppressWarnings("unused")

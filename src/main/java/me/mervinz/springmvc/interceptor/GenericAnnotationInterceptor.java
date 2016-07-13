@@ -9,13 +9,20 @@ import javax.servlet.http.HttpServletResponse;
 import java.lang.annotation.Annotation;
 
 /**
- * Interface for AnnotationInterceptor
+ * Interface provide interceptor with generic support
  *
  * @param <T> annotation generic
  * @author Mervin
  */
 @SuppressWarnings("unused")
 public interface GenericAnnotationInterceptor<T extends Annotation> extends HandlerInterceptor {
+
+    /**
+     * Get annotation class
+     *
+     * @return type of annotation
+     */
+    Class<T> getAnnotationClass();
 
     /**
      * Replacement for original pre handler

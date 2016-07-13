@@ -77,7 +77,7 @@ public abstract class GenericAnnotationInterceptorAdapter<T extends Annotation>
      *
      * @return type of annotation
      */
-    public Class<T> getAnnotationClass() {
+    public final Class<T> getAnnotationClass() {
         return annotationClass;
     }
 

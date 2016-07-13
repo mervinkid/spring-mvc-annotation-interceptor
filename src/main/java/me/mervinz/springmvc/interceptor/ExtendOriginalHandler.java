@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * Interface provide handler for original handle method extension.
+ *
  * @author Mervin
  */
 @SuppressWarnings("unused")

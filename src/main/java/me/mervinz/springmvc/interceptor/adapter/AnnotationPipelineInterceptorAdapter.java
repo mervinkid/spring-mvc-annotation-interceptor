@@ -1,7 +1,6 @@
 package me.mervinz.springmvc.interceptor.adapter;
 
 import me.mervinz.springmvc.interceptor.AnnotationHandler;
-import me.mervinz.springmvc.interceptor.MultipleAnnotationSupport;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -10,11 +9,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.lang.annotation.Annotation;
 
 /**
+ * Interceptor implementation for multiple annotation with pipeline handle.
+ *
  * @author Mervin
  */
 @SuppressWarnings("unused")
 public final class AnnotationPipelineInterceptorAdapter
-        extends MultipleAnnotationSupportAdapter implements MultipleAnnotationSupport {
+        extends MultipleAnnotationSupportAdapter {
 
     /**
      * Override original post handler.
