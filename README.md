@@ -164,7 +164,7 @@ For detail see `pom.xml`.
 
 ## Authors
 
-[@Mervin](https://github.com/mofei2816) 
+[@Mervin](https://github.com/mervinkid) 
 
 ## License
 
