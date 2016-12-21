@@ -31,9 +31,9 @@
     </developers>
 
     <scm>
-        <connection>scm:https://github.com/mofei2816/spring-mvc-annotation-interceptor.git</connection>
-        <developerConnection>scm:https://github.com/mofei2816/spring-mvc-annotation-interceptor.git</developerConnection>
-        <url>https://github.com/mofei2816/spring-mvc-annotation-interceptor.git</url>
+        <connection>scm:https://github.com/mervinkid/spring-mvc-annotation-interceptor.git</connection>
+        <developerConnection>scm:https://github.com/mervinkid/spring-mvc-annotation-interceptor.git</developerConnection>
+        <url>https://github.com/mervinkid/spring-mvc-annotation-interceptor.git</url>
     </scm>
 
     <distributionManagement>
