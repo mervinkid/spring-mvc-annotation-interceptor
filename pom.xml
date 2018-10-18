@@ -6,7 +6,7 @@
 
     <groupId>me.mervinz</groupId>
     <artifactId>spring-mvc-annotation-interceptor</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <name>Spring MVC Annotation Interceptor</name>
     <description>A annotation generic based java web interceptor for Spring MVC.</description>
     <url>https://github.com/mofei2816/spring-mvc-annotation-interceptor</url>
@@ -48,7 +48,7 @@
     </distributionManagement>
 
     <properties>
-        <spring.version>4.1.6.RELEASE</spring.version>
+        <spring.version>4.3.17.RELEASE</spring.version>
         <commons-logging.version>1.2</commons-logging.version>
         <aopalliance.version>1.0</aopalliance.version>
         <servlet-api.version>3.1.0</servlet-api.version>
